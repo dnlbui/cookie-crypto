@@ -39,8 +39,12 @@ app.get('/current_user', (req, res) => {
   res.send(req.user);
 });
 
-passport.use('login', new LocalStrategy((username, password, done) => {
-  User.findOne({ username: username }).then(existingUser => {
+passport.use(
+  'login', 
+  new LocalStrategy((username, password, done) => {
+  User
+  .findOne({ username: username })
+  .then(existingUser => {
     if (existingUser) {
       // we already have a record with the given profile ID
       if (existingUser.validPassword(password)) {
@@ -84,7 +88,7 @@ app.get('/logout', (req, res) => {
   res.send('Logged out!');
 });
 
-app.get('/success', (req, res) => {
+app.get('/success',authenticateRequest, (req, res) => {
   res.send('Hey, hello from the server!');
 });
 
